@@ -89,6 +89,11 @@ class UploadAction extends BaseAction
      */
     public $uploadPath = '';
 
+    /** 
+     * @var bool if should preserve the name of the original file
+     */
+    public $preserveFileName = false;
+
     /**
      *
      */
@@ -102,6 +107,10 @@ class UploadAction extends BaseAction
 
         if (\Yii::$app->request->get('upload-path')) {
             $this->uploadPath = \Yii::$app->request->get('upload-path');
+        }
+        
+        if (\Yii::$app->request->get('preserve-file-name')) {
+            $this->preserveFileName = boolval(\Yii::$app->request->get('preserve-file-name'));
         }
 
         if ($this->disableCsrf) {
@@ -129,8 +138,7 @@ class UploadAction extends BaseAction
             if ($uploadedFile->error === UPLOAD_ERR_OK) {
                 $validationModel = DynamicModel::validateData(['file' => $uploadedFile], $this->validationRules);
                 if (!$validationModel->hasErrors()) {
-                    $path = $this->getFileStorage()->save($uploadedFile, false, false, [], $this->uploadPath);
-
+                    $path = $this->getFileStorage()->save($uploadedFile, $this->preserveFileName, false, [], $this->uploadPath);
                     if ($path) {
                         $output[$this->responsePathParam] = $path;
                         $output[$this->responseUrlParam] = $this->getFileStorage()->baseUrl . '/' . $path;

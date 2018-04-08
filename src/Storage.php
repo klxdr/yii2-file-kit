@@ -116,7 +116,7 @@ class Storage extends Component
                 $path = implode(DIRECTORY_SEPARATOR, [$pathPrefix, $dirIndex, $filename]);
             } while ($this->getFilesystem()->has($path));
         } else {
-            $filename = $fileObj->getPathInfo('filename');
+            $filename = $fileObj->getName();
             $path = implode(DIRECTORY_SEPARATOR, [$pathPrefix, $dirIndex, $filename]);
         }
 

@@ -35,6 +35,11 @@ class Upload extends InputWidget
     public $uploadPath = '';
 
     /**
+     * @var string path where files would be stored
+     */
+    public $preserveFileName = false;
+
+    /**
      * @var array
      */
     public $clientOptions = [];
@@ -112,6 +117,10 @@ class Upload extends InputWidget
 
         if (!array_key_exists('upload-path', $this->url) && !empty($this->uploadPath)) {
             $this->url['upload-path'] = $this->uploadPath;
+        }
+        
+        if (!array_key_exists('preserve-file-name', $this->url) && !empty($this->preserveFileName)) {
+            $this->url['preserve-file-name'] = intval($this->preserveFileName);
         }
 
         $this->clientOptions = ArrayHelper::merge(
