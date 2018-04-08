@@ -22,6 +22,12 @@ class File extends BaseObject
      * @var
      */
     protected $extension;
+
+    /**
+     * @var string original file name
+     */
+    protected $name = '';
+
     /**
      * @var
      */
@@ -54,15 +60,17 @@ class File extends BaseObject
                 throw new InvalidParamException("File upload error \"{$file->error}\"");
             }
             return \Yii::createObject([
-                'class'=>self::className(),
-                'path'=>$file->tempName,
-                'extension'=>$file->getExtension()
+                'class' => self::className(),
+                'path' => $file->tempName,
+                'name' => $file->name,
+                'extension' => $file->getExtension()
             ]);
         } // Path
         else {
             return \Yii::createObject([
                 'class' => self::className(),
-                'path' => FileHelper::normalizePath($file)
+                'path' => FileHelper::normalizePath($file),
+                'name' => basename($file),
             ]);
         }
     }
@@ -155,6 +163,22 @@ class File extends BaseObject
             return array_key_exists($part, $this->pathinfo) ? $this->pathinfo[$part] : null;
         }
         return $this->pathinfo;
+    }
+
+    /**
+     * @param $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 
     /**
