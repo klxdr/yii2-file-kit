@@ -10,7 +10,8 @@
     jQuery.fn.yiiUploadKit = function(options) {
         var $input = this;
         var $container = $input.parent('div');
-        var $files = $('<ul>', {"class":"files"}).insertBefore($input);
+        $input.wrapAll($('<ul>', {"class":"files"}));
+        var $files = $container.find('.files');
         var $emptyInput = $container.find('.empty-value');
 
         var methods = {
@@ -86,7 +87,7 @@
                         $.each(data.result.files, function (index, file) {
                             if (!file.error) {
                                 var item = methods.createItem(file);
-                                item.appendTo($files);
+                                item.insertBefore($container.find('.upload-kit-input'));
                             } else {
                                 methods.showError(file.errors)
                             }
@@ -152,7 +153,6 @@
                 if (options.multiple) {
                     name += '[' + index + ']';
                 }
-                console.log(options);
                 var item = $('<li>', {"class": "upload-kit-item done"})
                     .append($('<input/>', {"name": name + '[' + options.pathAttributeName + ']', "value": file[options.pathAttribute], "type":"hidden"}))
                     .append($('<input/>', {"name": name + '[name]', "value": file.name, "type":"hidden"}))
